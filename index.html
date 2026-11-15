@@ -6,7 +6,43 @@
 <title>¿Quién empieza?</title>
 <link rel="icon" type="image/png" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<link rel="manifest" href="manifest.json">
+<link rel="manifest" href="manifest.json" id="manifest-link">
+<meta name="apple-mobile-web-app-title" content="¿Quién empieza?" id="app-title">
+<script>
+/* App name in the phone's language. Android reads the translations straight from
+   manifest.json; Safari on iPhone does not, so there the manifest is rebuilt here
+   with the name already translated, before "Add to Home Screen" reads it. */
+(function () {
+  var NAMES = { es: '¿Quién empieza?', ca: 'Qui comença?', gl: 'Quen comeza?', en: 'Who goes first?',
+    fr: 'Qui commence ?', de: 'Wer fängt an?', it: 'Chi comincia?', pt: 'Quem começa?', nl: 'Wie begint?' };
+  var prefs = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || 'en'];
+  var lang = 'en';
+  for (var i = 0; i < prefs.length; i++) {
+    var base = String(prefs[i]).toLowerCase().split('-')[0];
+    if (NAMES[base]) { lang = base; break; }
+  }
+  var name = NAMES[lang];
+  document.title = name;
+  document.getElementById('app-title').setAttribute('content', name);
+  var ios = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+            (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  if (!ios) return;
+  try {
+    var here = function (path) { return new URL(path, location.href).href; };
+    var manifest = {
+      id: here('./'), name: name, short_name: name, lang: lang,
+      start_url: here('./'), scope: here('./'), display: 'fullscreen',
+      background_color: '#030427', theme_color: '#030427',
+      icons: [
+        { src: here('icon-192.png'), sizes: '192x192', type: 'image/png' },
+        { src: here('icon-512.png'), sizes: '512x512', type: 'image/png' }
+      ]
+    };
+    document.getElementById('manifest-link').setAttribute('href',
+      'data:application/manifest+json;charset=utf-8,' + encodeURIComponent(JSON.stringify(manifest)));
+  } catch (e) {}
+})();
+</script>
 <meta name="theme-color" content="#030427">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
