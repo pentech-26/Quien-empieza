@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>¿Quién empieza?</title>
 <link rel="icon" type="image/png" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -142,6 +142,30 @@
     letter-spacing: .04em;
   }
   #intro[hidden] { display: none; }
+
+  /* Close cross: only shown once the first player has been picked */
+  #close {
+    position: fixed;
+    top: max(16px, env(safe-area-inset-top));
+    right: max(16px, env(safe-area-inset-right));
+    z-index: 4;
+    width: 52px; height: 52px;
+    border-radius: 50%;
+    border: 2px solid rgba(243, 239, 226, .35);
+    background: rgba(3, 4, 39, .78);
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    cursor: pointer;
+    animation: close-in .35s ease .6s both;
+  }
+  #close[hidden] { display: none; }
+  #close:active { transform: scale(.92); }
+  #close:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+  @keyframes close-in { from { opacity: 0; transform: scale(.6); } to { opacity: 1; transform: scale(1); } }
+  @media (prefers-reduced-motion: reduce) { #close { animation: none; } }
 </style>
 </head>
 <body>
@@ -152,6 +176,10 @@
   <div id="hint-sub">De 2 a 7 jugadores</div>
 </div>
 
+<button id="close" type="button" aria-label="Cerrar" hidden>
+  <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg>
+</button>
+
 <div id="intro">
   <img class="app-icon" src="icon-512.png" alt="" width="112" height="112">
   <h1><span id="t-title1">¿Quién</span><br><span id="t-title2" class="accent">empieza?</span></h1>
@@ -161,7 +189,7 @@
     <li><b>3.</b> <span id="t-s3">Tres segundos de tensión y el móvil elige.</span></li>
   </ol>
   <button id="start" type="button">Empezar</button>
-  <small>by PenTech v1.3</small>
+  <small>by PenTech v1.5</small>
 </div>
 
 <script>
@@ -182,6 +210,7 @@
           ready: '¿Estáis todos?', readySub: 'Dedos quietos, que empieza',
           win: '¡Empiezas tú!', winSub: 'Levantad los dedos para repetir',
           limit: 'El móvil ha soltado los dedos', limitSub: 'Algunos móviles, como los iPhone, solo detectan 5 a la vez',
+          close: 'Cerrar',
           mat: 'Zona táctil: cada jugador pone un dedo' },
     ca: { title1: 'Qui', title2: 'comença?',
           s1: 'Deixeu el mòbil pla sobre la taula.', s2: 'Cada jugador hi posa un dit i el deixa quiet.', s3: 'Tres segons de tensió i el mòbil tria.',
@@ -190,6 +219,7 @@
           ready: 'Hi sou tots?', readySub: 'Dits quiets, que comença',
           win: 'Comences tu!', winSub: 'Aixequeu els dits per repetir',
           limit: 'El mòbil ha deixat anar els dits', limitSub: 'Alguns mòbils, com els iPhone, només en detecten 5 alhora',
+          close: 'Tancar',
           mat: 'Zona tàctil: cada jugador hi posa un dit' },
     gl: { title1: 'Quen', title2: 'comeza?',
           s1: 'Deixade o móbil plano na mesa.', s2: 'Cada xogador pon un dedo e déixao quieto.', s3: 'Tres segundos de tensión e o móbil elixe.',
@@ -198,6 +228,7 @@
           ready: 'Estades todos?', readySub: 'Dedos quietos, que comeza',
           win: 'Comezas ti!', winSub: 'Levantade os dedos para repetir',
           limit: 'O móbil soltou os dedos', limitSub: 'Algúns móbiles, coma os iPhone, só detectan 5 á vez',
+          close: 'Pechar',
           mat: 'Zona táctil: cada xogador pon un dedo' },
     en: { title1: 'Who goes', title2: 'first?',
           s1: 'Lay the phone flat on the table.', s2: 'Each player puts one finger down and holds still.', s3: 'Three tense seconds and the phone picks.',
@@ -206,6 +237,7 @@
           ready: 'Everyone in?', readySub: 'Hold still, here we go',
           win: 'You go first!', winSub: 'Lift your fingers to play again',
           limit: 'The phone lost your fingers', limitSub: 'Some phones, like iPhones, only track 5 at once',
+          close: 'Close',
           mat: 'Touch area: each player puts one finger down' },
     fr: { title1: 'Qui', title2: 'commence ?',
           s1: 'Posez le téléphone à plat sur la table.', s2: 'Chaque joueur pose un doigt et ne bouge plus.', s3: 'Trois secondes de suspense et le téléphone choisit.',
@@ -214,6 +246,7 @@
           ready: 'Tout le monde est là ?', readySub: 'On ne bouge plus, c’est parti',
           win: 'Tu commences !', winSub: 'Levez les doigts pour rejouer',
           limit: 'Le téléphone a perdu vos doigts', limitSub: 'Certains téléphones, comme les iPhone, n’en détectent que 5 à la fois',
+          close: 'Fermer',
           mat: 'Zone tactile : chaque joueur pose un doigt' },
     de: { title1: 'Wer', title2: 'fängt an?',
           s1: 'Legt das Handy flach auf den Tisch.', s2: 'Jeder Spieler legt einen Finger auf und hält still.', s3: 'Drei Sekunden Spannung, dann wählt das Handy.',
@@ -222,6 +255,7 @@
           ready: 'Alle dabei?', readySub: 'Stillhalten, gleich geht’s los',
           win: 'Du fängst an!', winSub: 'Finger heben für eine neue Runde',
           limit: 'Das Handy hat die Finger verloren', limitSub: 'Manche Handys, etwa iPhones, erkennen nur 5 gleichzeitig',
+          close: 'Schließen',
           mat: 'Touch-Bereich: Jeder Spieler legt einen Finger auf' },
     it: { title1: 'Chi', title2: 'comincia?',
           s1: 'Appoggiate il telefono sul tavolo.', s2: 'Ogni giocatore mette un dito e lo tiene fermo.', s3: 'Tre secondi di tensione e il telefono sceglie.',
@@ -230,6 +264,7 @@
           ready: 'Ci siete tutti?', readySub: 'Fermi, si parte',
           win: 'Cominci tu!', winSub: 'Alzate le dita per ripetere',
           limit: 'Il telefono ha perso le dita', limitSub: 'Alcuni telefoni, come gli iPhone, ne rilevano solo 5 alla volta',
+          close: 'Chiudi',
           mat: 'Area tattile: ogni giocatore mette un dito' },
     pt: { title1: 'Quem', title2: 'começa?',
           s1: 'Coloquem o telefone deitado na mesa.', s2: 'Cada jogador põe um dedo e fica quieto.', s3: 'Três segundos de tensão e o telefone escolhe.',
@@ -238,6 +273,7 @@
           ready: 'Estão todos?', readySub: 'Dedos quietos, vai começar',
           win: 'Quem começa é você!', winSub: 'Levantem os dedos para repetir',
           limit: 'O telefone perdeu os dedos', limitSub: 'Alguns telefones, como os iPhone, só reconhecem 5 de cada vez',
+          close: 'Fechar',
           mat: 'Zona tátil: cada jogador põe um dedo' },
     nl: { title1: 'Wie', title2: 'begint?',
           s1: 'Leg de telefoon plat op tafel.', s2: 'Elke speler legt één vinger neer en houdt die stil.', s3: 'Drie spannende seconden en de telefoon kiest.',
@@ -246,6 +282,7 @@
           ready: 'Is iedereen er?', readySub: 'Stilhouden, daar gaan we',
           win: 'Jij begint!', winSub: 'Til je vingers op om opnieuw te spelen',
           limit: 'De telefoon is de vingers kwijt', limitSub: 'Sommige telefoons, zoals iPhones, herkennen er maar 5 tegelijk',
+          close: 'Sluiten',
           mat: 'Aanraakzone: elke speler legt één vinger neer' }
   };
   var lang = 'en';
@@ -266,9 +303,11 @@
   document.getElementById('t-s3').textContent = T.s3;
   document.getElementById('start').textContent = T.start;
   canvas.setAttribute('aria-label', T.mat);
+  document.getElementById('close').setAttribute('aria-label', T.close);
 
-  var PALETTE = ['#FF4D6D', '#FFB703', '#3DDC97', '#4CC9F0', '#B388FF',
-                 '#FF8A3D', '#F9F871', '#FF70E0', '#7AE582', '#5B8CFF'];
+  // Handed out in this order: each new finger gets the colour most different
+  // from those already on the table (red, blue, green, yellow, sky, orange, pink).
+  var PALETTE = ['#FF4D5E', '#5B7CFF', '#3DDC84', '#FFD60A', '#38C6FF', '#FF8C1A', '#FF5CC8'];
   var MAX_PLAYERS = 7;
   var SETTLE_MS = 1200;     // quiet time before the countdown starts
   var COUNTDOWN_MS = 3000;  // pulsing time before choosing
@@ -284,6 +323,7 @@
   var winner = null;        // {x, y, color}
   var chosenAt = 0;
   var allLiftedAt = 0;
+  var played = false;       // a first player has been picked since the start screen
   var noticeUntil = 0;      // shows the 'phone dropped the fingers' message until then
 
   function resize() {
@@ -341,9 +381,10 @@
   function pickColor() {
     var used = new Set();
     fingers.forEach(function (f) { used.add(f.color); });
-    var free = PALETTE.filter(function (c) { return !used.has(c); });
-    var pool = free.length ? free : PALETTE;
-    return pool[Math.floor(Math.random() * pool.length)];
+    for (var i = 0; i < PALETTE.length; i++) {
+      if (!used.has(PALETTE[i])) return PALETTE[i];
+    }
+    return PALETTE[0];
   }
 
   function randomIndex(n) {
@@ -424,6 +465,27 @@
     setTimeout(resize, 300);
   });
 
+  // --- Close cross: try to close; browsers usually refuse, so fall back to the start screen ---
+  var closeBtn = document.getElementById('close');
+  closeBtn.addEventListener('click', function () {
+    try { window.close(); } catch (e) {}
+    setTimeout(function () {
+      fingers.clear();
+      winner = null;
+      allLiftedAt = 0;
+      noticeUntil = 0;
+      played = false;
+      state = 'idle';
+      closeBtn.hidden = true;
+      try {
+        if (document.fullscreenElement && document.exitFullscreen) {
+          var p = document.exitFullscreen(); if (p && p.catch) p.catch(function () {});
+        }
+      } catch (e) {}
+      intro.hidden = false;
+    }, 150);
+  });
+
   function setHint(main, sub, onColor, hidden) {
     if (hintMain.textContent !== main) hintMain.textContent = main;
     if (hintSub.textContent !== sub) hintSub.textContent = sub;
@@ -436,6 +498,7 @@
     var w = list[randomIndex(list.length)];
     winner = { x: w.x, y: w.y, color: w.color };
     state = 'chosen';
+    played = true;
     chosenAt = now;
     allLiftedAt = 0;
     buzz([250, 90, 450]);
@@ -466,6 +529,9 @@
       state = 'idle';
     }
     beat *= 0.90;
+    // stays after the fingers lift, hides while a new round is being set up
+    var showClose = state === 'chosen' || (state === 'idle' && played);
+    if (closeBtn.hidden === showClose) closeBtn.hidden = !showClose;
 
     if (state === 'idle') {
       if (now < noticeUntil) setHint(T.limit, T.limitSub);
