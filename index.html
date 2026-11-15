@@ -149,7 +149,7 @@
 
 <div id="hint">
   <div id="hint-main">Poned todos un dedo en la pantalla</div>
-  <div id="hint-sub">De 2 a 10 jugadores</div>
+  <div id="hint-sub">De 2 a 7 jugadores</div>
 </div>
 
 <div id="intro">
@@ -161,7 +161,7 @@
     <li><b>3.</b> <span id="t-s3">Tres segundos de tensión y el móvil elige.</span></li>
   </ol>
   <button id="start" type="button">Empezar</button>
-  <small>by PenTech v1.0</small>
+  <small>by PenTech v1.1</small>
 </div>
 
 <script>
@@ -177,66 +177,75 @@
   var TEXTS = {
     es: { title1: '¿Quién', title2: 'empieza?',
           s1: 'Dejad el móvil plano en la mesa.', s2: 'Cada jugador pone un dedo y lo deja quieto.', s3: 'Tres segundos de tensión y el móvil elige.',
-          start: 'Empezar', idle: 'Poned todos un dedo en la pantalla', idleSub: 'De 2 a 10 jugadores',
+          start: 'Empezar', idle: 'Poned todos un dedo en la pantalla', idleSub: 'De 2 a 7 jugadores',
           missing: 'Falta alguien', missingSub: 'Hace falta al menos otro dedo',
           ready: '¿Estáis todos?', readySub: 'Dedos quietos, que empieza',
           win: '¡Empiezas tú!', winSub: 'Levantad los dedos para repetir',
+          limit: 'El móvil ha soltado los dedos', limitSub: 'Algunos móviles, como los iPhone, solo detectan 5 a la vez',
           mat: 'Zona táctil: cada jugador pone un dedo' },
     ca: { title1: 'Qui', title2: 'comença?',
           s1: 'Deixeu el mòbil pla sobre la taula.', s2: 'Cada jugador hi posa un dit i el deixa quiet.', s3: 'Tres segons de tensió i el mòbil tria.',
-          start: 'Comencem', idle: 'Poseu tots un dit a la pantalla', idleSub: 'De 2 a 10 jugadors',
+          start: 'Comencem', idle: 'Poseu tots un dit a la pantalla', idleSub: 'De 2 a 7 jugadors',
           missing: 'Falta algú', missingSub: 'Cal almenys un altre dit',
           ready: 'Hi sou tots?', readySub: 'Dits quiets, que comença',
           win: 'Comences tu!', winSub: 'Aixequeu els dits per repetir',
+          limit: 'El mòbil ha deixat anar els dits', limitSub: 'Alguns mòbils, com els iPhone, només en detecten 5 alhora',
           mat: 'Zona tàctil: cada jugador hi posa un dit' },
     gl: { title1: 'Quen', title2: 'comeza?',
           s1: 'Deixade o móbil plano na mesa.', s2: 'Cada xogador pon un dedo e déixao quieto.', s3: 'Tres segundos de tensión e o móbil elixe.',
-          start: 'Comezar', idle: 'Poñede todos un dedo na pantalla', idleSub: 'De 2 a 10 xogadores',
+          start: 'Comezar', idle: 'Poñede todos un dedo na pantalla', idleSub: 'De 2 a 7 xogadores',
           missing: 'Falta alguén', missingSub: 'Fai falta polo menos outro dedo',
           ready: 'Estades todos?', readySub: 'Dedos quietos, que comeza',
           win: 'Comezas ti!', winSub: 'Levantade os dedos para repetir',
+          limit: 'O móbil soltou os dedos', limitSub: 'Algúns móbiles, coma os iPhone, só detectan 5 á vez',
           mat: 'Zona táctil: cada xogador pon un dedo' },
     en: { title1: 'Who goes', title2: 'first?',
           s1: 'Lay the phone flat on the table.', s2: 'Each player puts one finger down and holds still.', s3: 'Three tense seconds and the phone picks.',
-          start: 'Start', idle: 'Everyone put a finger on the screen', idleSub: '2 to 10 players',
+          start: 'Start', idle: 'Everyone put a finger on the screen', idleSub: '2 to 7 players',
           missing: "Someone's missing", missingSub: 'At least one more finger needed',
           ready: 'Everyone in?', readySub: 'Hold still, here we go',
           win: 'You go first!', winSub: 'Lift your fingers to play again',
+          limit: 'The phone lost your fingers', limitSub: 'Some phones, like iPhones, only track 5 at once',
           mat: 'Touch area: each player puts one finger down' },
     fr: { title1: 'Qui', title2: 'commence ?',
           s1: 'Posez le téléphone à plat sur la table.', s2: 'Chaque joueur pose un doigt et ne bouge plus.', s3: 'Trois secondes de suspense et le téléphone choisit.',
-          start: 'Commencer', idle: "Posez tous un doigt sur l'écran", idleSub: 'De 2 à 10 joueurs',
+          start: 'Commencer', idle: "Posez tous un doigt sur l'écran", idleSub: 'De 2 à 7 joueurs',
           missing: 'Il manque quelqu’un', missingSub: 'Il faut au moins un autre doigt',
           ready: 'Tout le monde est là ?', readySub: 'On ne bouge plus, c’est parti',
           win: 'Tu commences !', winSub: 'Levez les doigts pour rejouer',
+          limit: 'Le téléphone a perdu vos doigts', limitSub: 'Certains téléphones, comme les iPhone, n’en détectent que 5 à la fois',
           mat: 'Zone tactile : chaque joueur pose un doigt' },
     de: { title1: 'Wer', title2: 'fängt an?',
           s1: 'Legt das Handy flach auf den Tisch.', s2: 'Jeder Spieler legt einen Finger auf und hält still.', s3: 'Drei Sekunden Spannung, dann wählt das Handy.',
-          start: 'Los geht’s', idle: 'Legt alle einen Finger auf den Bildschirm', idleSub: '2 bis 10 Spieler',
+          start: 'Los geht’s', idle: 'Legt alle einen Finger auf den Bildschirm', idleSub: '2 bis 7 Spieler',
           missing: 'Da fehlt noch jemand', missingSub: 'Mindestens ein weiterer Finger nötig',
           ready: 'Alle dabei?', readySub: 'Stillhalten, gleich geht’s los',
           win: 'Du fängst an!', winSub: 'Finger heben für eine neue Runde',
+          limit: 'Das Handy hat die Finger verloren', limitSub: 'Manche Handys, etwa iPhones, erkennen nur 5 gleichzeitig',
           mat: 'Touch-Bereich: Jeder Spieler legt einen Finger auf' },
     it: { title1: 'Chi', title2: 'comincia?',
           s1: 'Appoggiate il telefono sul tavolo.', s2: 'Ogni giocatore mette un dito e lo tiene fermo.', s3: 'Tre secondi di tensione e il telefono sceglie.',
-          start: 'Inizia', idle: 'Mettete tutti un dito sullo schermo', idleSub: 'Da 2 a 10 giocatori',
+          start: 'Inizia', idle: 'Mettete tutti un dito sullo schermo', idleSub: 'Da 2 a 7 giocatori',
           missing: 'Manca qualcuno', missingSub: 'Serve almeno un altro dito',
           ready: 'Ci siete tutti?', readySub: 'Fermi, si parte',
           win: 'Cominci tu!', winSub: 'Alzate le dita per ripetere',
+          limit: 'Il telefono ha perso le dita', limitSub: 'Alcuni telefoni, come gli iPhone, ne rilevano solo 5 alla volta',
           mat: 'Area tattile: ogni giocatore mette un dito' },
     pt: { title1: 'Quem', title2: 'começa?',
           s1: 'Coloquem o telefone deitado na mesa.', s2: 'Cada jogador põe um dedo e fica quieto.', s3: 'Três segundos de tensão e o telefone escolhe.',
-          start: 'Começar', idle: 'Todos com um dedo no telefone', idleSub: 'De 2 a 10 jogadores',
+          start: 'Começar', idle: 'Todos com um dedo no telefone', idleSub: 'De 2 a 7 jogadores',
           missing: 'Falta alguém', missingSub: 'É preciso pelo menos mais um dedo',
           ready: 'Estão todos?', readySub: 'Dedos quietos, vai começar',
           win: 'Quem começa é você!', winSub: 'Levantem os dedos para repetir',
+          limit: 'O telefone perdeu os dedos', limitSub: 'Alguns telefones, como os iPhone, só reconhecem 5 de cada vez',
           mat: 'Zona tátil: cada jogador põe um dedo' },
     nl: { title1: 'Wie', title2: 'begint?',
           s1: 'Leg de telefoon plat op tafel.', s2: 'Elke speler legt één vinger neer en houdt die stil.', s3: 'Drie spannende seconden en de telefoon kiest.',
-          start: 'Start', idle: 'Leg allemaal een vinger op het scherm', idleSub: '2 tot 10 spelers',
+          start: 'Start', idle: 'Leg allemaal een vinger op het scherm', idleSub: '2 tot 7 spelers',
           missing: 'Er ontbreekt iemand', missingSub: 'Minstens nog één vinger nodig',
           ready: 'Is iedereen er?', readySub: 'Stilhouden, daar gaan we',
           win: 'Jij begint!', winSub: 'Til je vingers op om opnieuw te spelen',
+          limit: 'De telefoon is de vingers kwijt', limitSub: 'Sommige telefoons, zoals iPhones, herkennen er maar 5 tegelijk',
           mat: 'Aanraakzone: elke speler legt één vinger neer' }
   };
   var lang = 'en';
@@ -260,6 +269,7 @@
 
   var PALETTE = ['#FF4D6D', '#FFB703', '#3DDC97', '#4CC9F0', '#B388FF',
                  '#FF8A3D', '#F9F871', '#FF70E0', '#7AE582', '#5B8CFF'];
+  var MAX_PLAYERS = 7;
   var SETTLE_MS = 1200;     // quiet time before the countdown starts
   var COUNTDOWN_MS = 3000;  // pulsing time before choosing
   var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -274,6 +284,7 @@
   var winner = null;        // {x, y, color}
   var chosenAt = 0;
   var allLiftedAt = 0;
+  var noticeUntil = 0;      // shows the 'phone dropped the fingers' message until then
 
   function resize() {
     dpr = Math.min(window.devicePixelRatio || 1, 3);
@@ -362,11 +373,15 @@
     e.preventDefault();
     var now = performance.now();
     if (state === 'chosen') return;
+    noticeUntil = 0;
+    var added = false;
     for (var i = 0; i < e.changedTouches.length; i++) {
+      if (fingers.size >= MAX_PLAYERS) break;   // extra fingers are ignored
       var t = e.changedTouches[i], p = pos(t);
       fingers.set(t.identifier, { x: p.x, y: p.y, color: pickColor(), born: now });
+      added = true;
     }
-    changed(now);
+    if (added) changed(now);
   }, { passive: false });
 
   canvas.addEventListener('touchmove', function (e) {
@@ -380,15 +395,18 @@
   function lift(e) {
     e.preventDefault();
     var now = performance.now();
+    var before = fingers.size, removed = false;
     for (var i = 0; i < e.changedTouches.length; i++) {
-      fingers.delete(e.changedTouches[i].identifier);
+      if (fingers.delete(e.changedTouches[i].identifier)) removed = true;
     }
     initAudio();   // wakes the sound again if the phone had paused it
     if (state === 'chosen') {
       if (e.touches.length === 0) allLiftedAt = now;
       return;
     }
-    changed(now);
+    // The phone itself cancelled every finger at once: it hit its own touch limit
+    if (e.type === 'touchcancel' && before >= 5 && fingers.size === 0) noticeUntil = now + 4500;
+    if (removed) changed(now);   // lifting an ignored extra finger changes nothing
   }
   canvas.addEventListener('touchend', lift, { passive: false });
   canvas.addEventListener('touchcancel', lift, { passive: false });
@@ -449,7 +467,10 @@
     }
     beat *= 0.90;
 
-    if (state === 'idle') setHint(T.idle, T.idleSub);
+    if (state === 'idle') {
+      if (now < noticeUntil) setHint(T.limit, T.limitSub);
+      else setHint(T.idle, T.idleSub);
+    }
     else if (state === 'settling') {
       if (fingers.size < 2) setHint(T.missing, T.missingSub);
       else setHint(T.ready, T.readySub);
