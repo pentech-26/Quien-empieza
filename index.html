@@ -4,6 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>¿Quién empieza?</title>
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#030427">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&display=swap" rel="stylesheet">
@@ -12,10 +18,10 @@
      Text sits in the centre so it reads from any side of the table. */
   :root {
     color-scheme: dark;
-    --felt: #10231d;        /* deep table-felt green */
-    --felt-deep: #0a1713;
+    --felt: #030427;        /* the icon's dark navy */
+    --felt-deep: #030427;
     --ink: #f3efe2;         /* card-stock off-white */
-    --ink-soft: #9db3a8;
+    --ink-soft: #a3a8c7;
     --brass: #e9b44c;       /* accent: brass token */
     --font-display: "Bricolage Grotesque", "Trebuchet MS", "Segoe UI", sans-serif;
     --font-body: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
@@ -94,7 +100,7 @@
     line-height: .95;
     letter-spacing: -0.02em;
   }
-  #intro h1 span { color: var(--brass); }
+  #intro h1 .accent { color: var(--brass); }
   #intro ol {
     margin: 0;
     padding: 0;
@@ -107,10 +113,11 @@
     max-width: 30ch;
   }
   #intro ol b { color: var(--ink); font-weight: 500; }
-  .dots { display: flex; gap: 10px; }
-  .dots i {
-    width: 22px; height: 22px; border-radius: 50%;
+  .app-icon {
+    width: 112px; height: 112px;
+    border-radius: 26px;
     display: block;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, .45);
   }
   #start {
     font: inherit;
@@ -127,7 +134,13 @@
   }
   #start:active { transform: translateY(4px); box-shadow: 0 2px 0 #9a7424; }
   #start:focus-visible { outline: 3px solid var(--ink); outline-offset: 4px; }
-  #intro small { color: var(--ink-soft); font-size: .85rem; max-width: 34ch; }
+  #intro small {
+    position: absolute;
+    left: 0; right: 0; bottom: 20px;
+    color: var(--ink-soft);
+    font-size: .85rem;
+    letter-spacing: .04em;
+  }
   #intro[hidden] { display: none; }
 </style>
 </head>
@@ -140,17 +153,15 @@
 </div>
 
 <div id="intro">
-  <div class="dots" aria-hidden="true">
-    <i style="background:#FF4D6D"></i><i style="background:#FFB703"></i><i style="background:#3DDC97"></i><i style="background:#4CC9F0"></i><i style="background:#B388FF"></i>
-  </div>
-  <h1>¿Quién<br><span>empieza?</span></h1>
+  <img class="app-icon" src="icon-512.png" alt="" width="112" height="112">
+  <h1><span id="t-title1">¿Quién</span><br><span id="t-title2" class="accent">empieza?</span></h1>
   <ol>
-    <li><b>1.</b> Dejad el móvil plano en la mesa.</li>
-    <li><b>2.</b> Cada jugador pone un dedo y lo deja quieto.</li>
-    <li><b>3.</b> Tres segundos de tensión y el móvil elige.</li>
+    <li><b>1.</b> <span id="t-s1">Dejad el móvil plano en la mesa.</span></li>
+    <li><b>2.</b> <span id="t-s2">Cada jugador pone un dedo y lo deja quieto.</span></li>
+    <li><b>3.</b> <span id="t-s3">Tres segundos de tensión y el móvil elige.</span></li>
   </ol>
   <button id="start" type="button">Empezar</button>
-  <small>La vibración funciona en Android. En iPhone solo veréis los latidos de color.</small>
+  <small>by PenTech v1.0</small>
 </div>
 
 <script>
@@ -161,6 +172,91 @@
   var hintMain = document.getElementById('hint-main');
   var hintSub = document.getElementById('hint-sub');
   var intro = document.getElementById('intro');
+
+  // --- Texts: picked from the phone's language, English if none matches ---
+  var TEXTS = {
+    es: { title1: '¿Quién', title2: 'empieza?',
+          s1: 'Dejad el móvil plano en la mesa.', s2: 'Cada jugador pone un dedo y lo deja quieto.', s3: 'Tres segundos de tensión y el móvil elige.',
+          start: 'Empezar', idle: 'Poned todos un dedo en la pantalla', idleSub: 'De 2 a 10 jugadores',
+          missing: 'Falta alguien', missingSub: 'Hace falta al menos otro dedo',
+          ready: '¿Estáis todos?', readySub: 'Dedos quietos, que empieza',
+          win: '¡Empiezas tú!', winSub: 'Levantad los dedos para repetir',
+          mat: 'Zona táctil: cada jugador pone un dedo' },
+    ca: { title1: 'Qui', title2: 'comença?',
+          s1: 'Deixeu el mòbil pla sobre la taula.', s2: 'Cada jugador hi posa un dit i el deixa quiet.', s3: 'Tres segons de tensió i el mòbil tria.',
+          start: 'Comencem', idle: 'Poseu tots un dit a la pantalla', idleSub: 'De 2 a 10 jugadors',
+          missing: 'Falta algú', missingSub: 'Cal almenys un altre dit',
+          ready: 'Hi sou tots?', readySub: 'Dits quiets, que comença',
+          win: 'Comences tu!', winSub: 'Aixequeu els dits per repetir',
+          mat: 'Zona tàctil: cada jugador hi posa un dit' },
+    gl: { title1: 'Quen', title2: 'comeza?',
+          s1: 'Deixade o móbil plano na mesa.', s2: 'Cada xogador pon un dedo e déixao quieto.', s3: 'Tres segundos de tensión e o móbil elixe.',
+          start: 'Comezar', idle: 'Poñede todos un dedo na pantalla', idleSub: 'De 2 a 10 xogadores',
+          missing: 'Falta alguén', missingSub: 'Fai falta polo menos outro dedo',
+          ready: 'Estades todos?', readySub: 'Dedos quietos, que comeza',
+          win: 'Comezas ti!', winSub: 'Levantade os dedos para repetir',
+          mat: 'Zona táctil: cada xogador pon un dedo' },
+    en: { title1: 'Who goes', title2: 'first?',
+          s1: 'Lay the phone flat on the table.', s2: 'Each player puts one finger down and holds still.', s3: 'Three tense seconds and the phone picks.',
+          start: 'Start', idle: 'Everyone put a finger on the screen', idleSub: '2 to 10 players',
+          missing: "Someone's missing", missingSub: 'At least one more finger needed',
+          ready: 'Everyone in?', readySub: 'Hold still, here we go',
+          win: 'You go first!', winSub: 'Lift your fingers to play again',
+          mat: 'Touch area: each player puts one finger down' },
+    fr: { title1: 'Qui', title2: 'commence ?',
+          s1: 'Posez le téléphone à plat sur la table.', s2: 'Chaque joueur pose un doigt et ne bouge plus.', s3: 'Trois secondes de suspense et le téléphone choisit.',
+          start: 'Commencer', idle: "Posez tous un doigt sur l'écran", idleSub: 'De 2 à 10 joueurs',
+          missing: 'Il manque quelqu’un', missingSub: 'Il faut au moins un autre doigt',
+          ready: 'Tout le monde est là ?', readySub: 'On ne bouge plus, c’est parti',
+          win: 'Tu commences !', winSub: 'Levez les doigts pour rejouer',
+          mat: 'Zone tactile : chaque joueur pose un doigt' },
+    de: { title1: 'Wer', title2: 'fängt an?',
+          s1: 'Legt das Handy flach auf den Tisch.', s2: 'Jeder Spieler legt einen Finger auf und hält still.', s3: 'Drei Sekunden Spannung, dann wählt das Handy.',
+          start: 'Los geht’s', idle: 'Legt alle einen Finger auf den Bildschirm', idleSub: '2 bis 10 Spieler',
+          missing: 'Da fehlt noch jemand', missingSub: 'Mindestens ein weiterer Finger nötig',
+          ready: 'Alle dabei?', readySub: 'Stillhalten, gleich geht’s los',
+          win: 'Du fängst an!', winSub: 'Finger heben für eine neue Runde',
+          mat: 'Touch-Bereich: Jeder Spieler legt einen Finger auf' },
+    it: { title1: 'Chi', title2: 'comincia?',
+          s1: 'Appoggiate il telefono sul tavolo.', s2: 'Ogni giocatore mette un dito e lo tiene fermo.', s3: 'Tre secondi di tensione e il telefono sceglie.',
+          start: 'Inizia', idle: 'Mettete tutti un dito sullo schermo', idleSub: 'Da 2 a 10 giocatori',
+          missing: 'Manca qualcuno', missingSub: 'Serve almeno un altro dito',
+          ready: 'Ci siete tutti?', readySub: 'Fermi, si parte',
+          win: 'Cominci tu!', winSub: 'Alzate le dita per ripetere',
+          mat: 'Area tattile: ogni giocatore mette un dito' },
+    pt: { title1: 'Quem', title2: 'começa?',
+          s1: 'Coloquem o telefone deitado na mesa.', s2: 'Cada jogador põe um dedo e fica quieto.', s3: 'Três segundos de tensão e o telefone escolhe.',
+          start: 'Começar', idle: 'Todos com um dedo no telefone', idleSub: 'De 2 a 10 jogadores',
+          missing: 'Falta alguém', missingSub: 'É preciso pelo menos mais um dedo',
+          ready: 'Estão todos?', readySub: 'Dedos quietos, vai começar',
+          win: 'Quem começa é você!', winSub: 'Levantem os dedos para repetir',
+          mat: 'Zona tátil: cada jogador põe um dedo' },
+    nl: { title1: 'Wie', title2: 'begint?',
+          s1: 'Leg de telefoon plat op tafel.', s2: 'Elke speler legt één vinger neer en houdt die stil.', s3: 'Drie spannende seconden en de telefoon kiest.',
+          start: 'Start', idle: 'Leg allemaal een vinger op het scherm', idleSub: '2 tot 10 spelers',
+          missing: 'Er ontbreekt iemand', missingSub: 'Minstens nog één vinger nodig',
+          ready: 'Is iedereen er?', readySub: 'Stilhouden, daar gaan we',
+          win: 'Jij begint!', winSub: 'Til je vingers op om opnieuw te spelen',
+          mat: 'Aanraakzone: elke speler legt één vinger neer' }
+  };
+  var lang = 'en';
+  (function () {
+    var prefs = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || 'en'];
+    for (var i = 0; i < prefs.length; i++) {
+      var base = String(prefs[i]).toLowerCase().split('-')[0];
+      if (TEXTS[base]) { lang = base; return; }
+    }
+  })();
+  var T = TEXTS[lang];
+  document.documentElement.lang = lang;
+  document.title = T.title1 + ' ' + T.title2;
+  document.getElementById('t-title1').textContent = T.title1;
+  document.getElementById('t-title2').textContent = T.title2;
+  document.getElementById('t-s1').textContent = T.s1;
+  document.getElementById('t-s2').textContent = T.s2;
+  document.getElementById('t-s3').textContent = T.s3;
+  document.getElementById('start').textContent = T.start;
+  canvas.setAttribute('aria-label', T.mat);
 
   var PALETTE = ['#FF4D6D', '#FFB703', '#3DDC97', '#4CC9F0', '#B388FF',
                  '#FF8A3D', '#F9F871', '#FF70E0', '#7AE582', '#5B8CFF'];
@@ -190,6 +286,45 @@
 
   function buzz(pattern) {
     try { if (navigator.vibrate) navigator.vibrate(pattern); } catch (e) {}
+  }
+
+  // --- Sound: synthesised with Web Audio, no files needed ---
+  var audio = null;
+  function initAudio() {
+    try {
+      var AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return;
+      if (!audio) audio = new AC();
+      if (audio.state === 'suspended') audio.resume();
+    } catch (e) {}
+  }
+  function tone(freq, start, dur, type, vol) {
+    if (!audio || audio.state !== 'running') return;
+    try {
+      var t0 = audio.currentTime + start;
+      var osc = audio.createOscillator();
+      var gain = audio.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, t0);
+      gain.gain.setValueAtTime(0.0001, t0);
+      gain.gain.exponentialRampToValueAtTime(vol, t0 + 0.012);
+      gain.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+      osc.connect(gain); gain.connect(audio.destination);
+      osc.start(t0); osc.stop(t0 + dur + 0.03);
+    } catch (e) {}
+  }
+  function tickSound(prog) {
+    // each beat climbs in pitch as the three seconds run out
+    tone(392 + 500 * prog, 0, 0.09, 'triangle', 0.35);
+    tone((392 + 500 * prog) / 2, 0, 0.12, 'sine', 0.25);
+  }
+  function winSound() {
+    // rising fanfare: C5 E5 G5, then a held C6 chord
+    var notes = [523.25, 659.25, 783.99];
+    for (var i = 0; i < notes.length; i++) tone(notes[i], i * 0.11, 0.16, 'triangle', 0.4);
+    tone(1046.5, 0.33, 0.75, 'triangle', 0.42);
+    tone(783.99, 0.33, 0.75, 'sine', 0.25);
+    tone(523.25, 0.33, 0.75, 'sine', 0.25);
   }
 
   function pickColor() {
@@ -248,6 +383,7 @@
     for (var i = 0; i < e.changedTouches.length; i++) {
       fingers.delete(e.changedTouches[i].identifier);
     }
+    initAudio();   // wakes the sound again if the phone had paused it
     if (state === 'chosen') {
       if (e.touches.length === 0) allLiftedAt = now;
       return;
@@ -260,6 +396,7 @@
 
   document.getElementById('start').addEventListener('click', function () {
     intro.hidden = true;
+    initAudio();
     buzz(30);
     var el = document.documentElement;
     try {
@@ -284,6 +421,7 @@
     chosenAt = now;
     allLiftedAt = 0;
     buzz([250, 90, 450]);
+    winSound();
   }
 
   function update(now) {
@@ -300,6 +438,7 @@
       else if (now >= nextBeat) {
         beat = 1;
         buzz(35);
+        tickSound(prog);
         nextBeat = now + (520 - 340 * prog);   // heartbeat speeds up
       }
     }
@@ -310,15 +449,15 @@
     }
     beat *= 0.90;
 
-    if (state === 'idle') setHint('Poned todos un dedo en la pantalla', 'De 2 a 10 jugadores');
+    if (state === 'idle') setHint(T.idle, T.idleSub);
     else if (state === 'settling') {
-      if (fingers.size < 2) setHint('Falta alguien', 'Hace falta al menos otro dedo');
-      else setHint('¿Estáis todos?', 'Dedos quietos, que empieza');
+      if (fingers.size < 2) setHint(T.missing, T.missingSub);
+      else setHint(T.ready, T.readySub);
     }
     else if (state === 'countdown') setHint('', '', false, true);
     else if (state === 'chosen') {
       var far = winner && Math.hypot(winner.x - W / 2, winner.y - H / 2) > 170;
-      setHint('¡Empiezas tú!', 'Levantad los dedos para repetir', true, !far);
+      setHint(T.win, T.winSub, true, !far);
     }
   }
 
@@ -335,7 +474,7 @@
       ctx.beginPath(); ctx.arc(winner.x, winner.y, maxR * ease, 0, Math.PI * 2); ctx.fill();
       // dark well around the chosen finger
       var breathe = reduceMotion ? 0 : Math.sin(now / 260) * 5;
-      ctx.fillStyle = '#0a1713';
+      ctx.fillStyle = '#030427';
       ctx.beginPath(); ctx.arc(winner.x, winner.y, (104 + breathe) * ease, 0, Math.PI * 2); ctx.fill();
       ctx.fillStyle = winner.color;
       ctx.beginPath(); ctx.arc(winner.x, winner.y, 62 * ease, 0, Math.PI * 2); ctx.fill();
