@@ -143,23 +143,24 @@
   }
   #intro[hidden] { display: none; }
 
-  /* Close cross: only shown once the first player has been picked */
+  /* Close cross: always on the play area, hidden while 2+ fingers are down */
   #close {
     position: fixed;
     top: max(16px, env(safe-area-inset-top));
     right: max(16px, env(safe-area-inset-right));
     z-index: 4;
-    width: 52px; height: 52px;
+    width: 60px; height: 60px;
     border-radius: 50%;
-    border: 2px solid rgba(243, 239, 226, .35);
-    background: rgba(3, 4, 39, .78);
+    border: 3px solid var(--ink);
+    background: rgba(3, 4, 39, .85);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, .45);
     color: var(--ink);
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 0;
     cursor: pointer;
-    animation: close-in .35s ease .6s both;
+    animation: close-in .25s ease both;
   }
   #close[hidden] { display: none; }
   #close:active { transform: scale(.92); }
@@ -177,7 +178,7 @@
 </div>
 
 <button id="close" type="button" aria-label="Cerrar" hidden>
-  <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg>
+  <svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
 </button>
 
 <div id="intro">
@@ -189,7 +190,7 @@
     <li><b>3.</b> <span id="t-s3">Tres segundos de tensión y el móvil elige.</span></li>
   </ol>
   <button id="start" type="button">Empezar</button>
-  <small>by PenTech v1.5</small>
+  <small>by PenTech v1.0</small>
 </div>
 
 <script>
@@ -529,8 +530,8 @@
       state = 'idle';
     }
     beat *= 0.90;
-    // stays after the fingers lift, hides while a new round is being set up
-    var showClose = state === 'chosen' || (state === 'idle' && played);
+    // always on the play area, hidden while two or more fingers are down
+    var showClose = intro.hidden && fingers.size < 2;
     if (closeBtn.hidden === showClose) closeBtn.hidden = !showClose;
 
     if (state === 'idle') {
