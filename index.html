@@ -99,6 +99,9 @@
     transition: opacity .25s ease;
   }
   #hint.hidden { opacity: 0; }
+  /* After the pick the message moves to the half away from the winning finger */
+  #hint.at-top { justify-content: flex-start; padding-top: max(120px, 16vh); }
+  #hint.at-bottom { justify-content: flex-end; padding-bottom: max(64px, 12vh); }
   #hint-main {
     font-family: var(--font-display);
     font-weight: 800;
@@ -513,11 +516,13 @@
     }, 150);
   });
 
-  function setHint(main, sub, onColor, hidden) {
+  function setHint(main, sub, onColor, hidden, place) {
     if (hintMain.textContent !== main) hintMain.textContent = main;
     if (hintSub.textContent !== sub) hintSub.textContent = sub;
     hint.classList.toggle('on-color', !!onColor);
     hint.classList.toggle('hidden', !!hidden);
+    hint.classList.toggle('at-top', place === 'top');
+    hint.classList.toggle('at-bottom', place === 'bottom');
   }
 
   function choose(now) {
@@ -570,8 +575,9 @@
     }
     else if (state === 'countdown') setHint('', '', false, true);
     else if (state === 'chosen') {
-      var far = winner && Math.hypot(winner.x - W / 2, winner.y - H / 2) > 170;
-      setHint(T.win, T.winSub, true, !far);
+      // always shown, in the half of the screen away from the winning finger
+      var place = winner && winner.y > H / 2 ? 'top' : 'bottom';
+      setHint(T.win, T.winSub, true, false, place);
     }
   }
 
