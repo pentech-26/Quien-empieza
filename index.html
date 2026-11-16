@@ -494,11 +494,6 @@
     intro.hidden = true;
     initAudio();
     buzz(30);
-    var el = document.documentElement;
-    try {
-      var p = el.requestFullscreen ? el.requestFullscreen() : null;
-      if (p && p.catch) p.catch(function () {});
-    } catch (e) {}
     setTimeout(resize, 300);
   });
 
@@ -514,11 +509,6 @@
       played = false;
       state = 'idle';
       closeBtn.hidden = true;
-      try {
-        if (document.fullscreenElement && document.exitFullscreen) {
-          var p = document.exitFullscreen(); if (p && p.catch) p.catch(function () {});
-        }
-      } catch (e) {}
       intro.hidden = false;
     }, 150);
   });
@@ -585,25 +575,28 @@
     }
   }
 
+  // Never hand the canvas a negative radius: it throws and would stop the animation
+  function arc(x, y, r, a0, a1) { ctx.arc(x, y, Math.max(0, r), a0, a1); }
+
   function draw(now) {
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.clearRect(0, 0, W, H);
 
     if (state === 'chosen' && winner) {
-      var t = Math.min(1, (now - chosenAt) / 450);
+      var t = Math.min(1, Math.max(0, (now - chosenAt) / 450));
       var ease = 1 - Math.pow(1 - t, 3);
       var maxR = Math.hypot(Math.max(winner.x, W - winner.x), Math.max(winner.y, H - winner.y)) + 20;
       // winner colour floods the table
       ctx.fillStyle = winner.color;
-      ctx.beginPath(); ctx.arc(winner.x, winner.y, maxR * ease, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath(); arc(winner.x, winner.y, maxR * ease, 0, Math.PI * 2); ctx.fill();
       // dark well around the chosen finger
       var breathe = reduceMotion ? 0 : Math.sin(now / 260) * 5;
       ctx.fillStyle = '#030427';
-      ctx.beginPath(); ctx.arc(winner.x, winner.y, (104 + breathe) * ease, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath(); arc(winner.x, winner.y, (104 + breathe) * ease, 0, Math.PI * 2); ctx.fill();
       ctx.fillStyle = winner.color;
-      ctx.beginPath(); ctx.arc(winner.x, winner.y, 62 * ease, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath(); arc(winner.x, winner.y, 62 * ease, 0, Math.PI * 2); ctx.fill();
       ctx.lineWidth = 6; ctx.strokeStyle = winner.color;
-      ctx.beginPath(); ctx.arc(winner.x, winner.y, (82 + breathe) * ease, 0, Math.PI * 2); ctx.stroke();
+      ctx.beginPath(); arc(winner.x, winner.y, (82 + breathe) * ease, 0, Math.PI * 2); ctx.stroke();
       return;
     }
 
@@ -613,9 +606,9 @@
       ctx.fillRect(0, 0, W, H);
     }
 
-    var prog = state === 'countdown' ? (now - countdownStart) / COUNTDOWN_MS : 0;
+    var prog = state === 'countdown' ? Math.min(1, Math.max(0, (now - countdownStart) / COUNTDOWN_MS)) : 0;
     fingers.forEach(function (f) {
-      var age = Math.min(1, (now - f.born) / 180);
+      var age = Math.min(1, Math.max(0, (now - f.born) / 180));
       var pop = 1 - Math.pow(1 - age, 3);
       var pulse = state === 'countdown' ? beat * (reduceMotion ? 0.06 : 0.28) : 0;
       var r = 50 * pop * (1 + pulse);
@@ -623,29 +616,31 @@
 
       ctx.globalAlpha = 0.22 + (state === 'countdown' ? 0.3 * beat : 0);
       ctx.fillStyle = f.color;
-      ctx.beginPath(); ctx.arc(f.x, f.y, ringR + 16, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath(); arc(f.x, f.y, ringR + 16, 0, Math.PI * 2); ctx.fill();
       ctx.globalAlpha = 1;
 
       ctx.fillStyle = f.color;
-      ctx.beginPath(); ctx.arc(f.x, f.y, r, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath(); arc(f.x, f.y, r, 0, Math.PI * 2); ctx.fill();
 
       ctx.lineWidth = 6; ctx.lineCap = 'round'; ctx.strokeStyle = f.color;
       ctx.beginPath();
       if (state === 'countdown') {
         // ring closes as the three seconds run out
-        ctx.arc(f.x, f.y, ringR, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * Math.max(0.02, 1 - prog));
+        arc(f.x, f.y, ringR, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * Math.max(0.02, 1 - prog));
       } else {
         var a = reduceMotion ? 0 : now / 500;
-        ctx.arc(f.x, f.y, ringR, a, a + Math.PI * 1.5);
+        arc(f.x, f.y, ringR, a, a + Math.PI * 1.5);
       }
       ctx.stroke();
     });
   }
 
-  function frame(now) {
-    update(now);
-    draw(now);
-    requestAnimationFrame(frame);
+  function frame() {
+    requestAnimationFrame(frame);   // schedule first, so nothing below can stop the loop
+    // Same clock as the touch handlers: the frame timestamp can be a few ms behind them
+    var now = performance.now();
+    try { update(now); } catch (e) {}
+    try { draw(now); } catch (e) {}
   }
   requestAnimationFrame(frame);
 })();
